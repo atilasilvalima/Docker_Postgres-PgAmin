@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./PostgreSQL:/var/lib/postgresql/data 
+    networks:
+      - postgres_pgadmin_network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "teste@teste.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - "8021:80"
+    volumes:
+      - ./PgAdmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - postgres_pgadmin_network
+
+volumes: 
+  PostgreSQL:
+  PgAdmin:
+
+networks: 
+  postgres_pgadmin_network:
+    driver: bridge
